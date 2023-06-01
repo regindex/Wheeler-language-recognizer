@@ -2,6 +2,7 @@
 
 ## Download and Compile
 
+```console
 1 - git clone https://github.com/regindex/Wheeler-language-recognizer.git
 2 - git submodule update --init --recursive
 3 - make -C external/DFA-suffix-doubling/
@@ -18,8 +19,11 @@
 14 - cd build
 15 - cmake ..
 16 - make 
+```
 
 ## Usage example 
 
+```console
 1 - python3 wheeler_lan_rec.py "a(ac*a)|(bc*b)"
 2 - python3 wheeler_lan_rec.py --DFA input.dfa 
+```
