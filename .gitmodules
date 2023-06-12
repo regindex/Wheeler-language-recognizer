@@ -4,9 +4,9 @@
 [submodule "external/DFA-suffix-doubling"]
 	path = external/DFA-suffix-doubling
 	url = https://github.com/regindex/DFA-suffix-doubling.git
-[submodule "external/WNFA-partition-refinement"]
-	path = external/WNFA-partition-refinement
-	url = https://github.com/regindex/WNFA-partition-refinement.git
 [submodule "external/re_to_dfa"]
 	path = external/re_to_dfa
 	url = https://github.com/fnvir/re_to_dfa.git
+[submodule "external/finite-automata-partition-refinement"]
+	path = external/finite-automata-partition-refinement
+	url = https://github.com/regindex/finite-automata-partition-refinement.git

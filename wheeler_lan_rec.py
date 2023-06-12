@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 
 import sys, time, argparse, subprocess, os.path
-sys.path.insert(1, '/home/davide/tools/re_to_dfa/src/')
+from pathlib import Path
+cwd = Path(__file__).parent.absolute()
+sys.path.insert(1, str(cwd)+'/external/re_to_dfa/src/')
 from re_to_dfa import *
 
 
 Description = """
-Tool to check if a regular expression recognize a Wheeler language.
+Tool to check if a regular expression recognizes a Wheeler language.
 """
 
 dirname = os.path.dirname(os.path.abspath(__file__))
 dfamin_exe    =  "external/dfaMinimizationComparison/Cpp/Modified/minimizer.x"
 convform_exe  =  "external/DFA-suffix-doubling/convert-format"
 pruning_exe   =  "build/prune.x"
-partref_exe   =  "external/WNFA-partition-refinement/build/part-ref32.x"
+partref_exe   =  "external/finite-automata-partition-refinement/build/part-ref32.x"
 doublingmerge_exe =  "external/DFAgen-suffixdoubling/suffix-doubling-on-pruned-graphs"
 recognizer_exe = "build/recognizer.x"
 
@@ -132,7 +134,7 @@ def main():
 
         start = time.time()
 
-        command = "{exe} {input1} {input2}".format(exe=doublingmerge_exe, input1=args.input+".infima.pruned", input2=args.input+".suprema.pruned")
+        command = "{exe} {input1} {input2}".format(exe=doublingmerge_exe, input1=args.input+".infima", input2=args.input+".suprema")
         print("==== merging infima and suprema pruned DFAs. Command: ", command)
 
         with open(args.input+".interval", 'w') as b:

@@ -44,8 +44,8 @@ endif()
 # Targets
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_executable(prune.x internal/prune_min_dfa.cpp external/WNFA-partition-refinement/external/malloc_count/malloc_count.c)
+add_executable(prune.x internal/prune_min_dfa.cpp external/finite-automata-partition-refinement/external/malloc_count/malloc_count.c)
 target_link_libraries(prune.x dl)
 
-add_executable(recognizer.x internal/wheeler-language-recognizer.cpp internal/automaton.hpp external/WNFA-partition-refinement/external/malloc_count/malloc_count.c)
+add_executable(recognizer.x internal/wheeler-language-recognizer.cpp internal/automaton.hpp external/finite-automata-partition-refinement/external/malloc_count/malloc_count.c)
 target_link_libraries(recognizer.x dl)
