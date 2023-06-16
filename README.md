@@ -41,7 +41,11 @@ make
 
 ### Input
 
-The tool takes in input a file containing in the first line the number of states, number of edges, source and number of accepting states of the input DFA. The rest of the file contains an edge per line (origin - label - destination) and a list of accepting states separated by newline characters (see below for an example).
+The tool takes in input a regular expression as recognized by the re_to_dfa tool,
+```
+"a(ac*a)|(bc*b)"
+```
+The tool can also take in input a DFA. The file has to contain in the first line the number of states, number of edges, source and number of accepting states of the input DFA. The rest of the file contains an edge per line (origin - label - destination) and a list of accepting states separated by newline characters. We assume there is a single outgoing edge from the source labeled by the smallest label in the automaton (see below for an example).
 ```
 9 12 0 2
 0 0 1
@@ -86,6 +90,8 @@ python3 wheeler_lan_rec.py --DFA data/regexp.dfa
 
 # External resources
 
+
+* [re_to_dfa](https://github.com/fnvir/re_to_dfa.git)
 * [malloc_count](https://github.com/bingmann/malloc_count)
 
 ### Funding
