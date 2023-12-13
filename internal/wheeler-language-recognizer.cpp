@@ -1,6 +1,6 @@
 // include DFA automaton implementation
 #include "automaton.hpp"
-#include "/home/davide/wheeler_language_recognition/external/malloc_count/malloc_count.h"
+#include "../external/finite-automata-partition-refinement/external/malloc_count/malloc_count.h"
 
 typedef DFA_unidirectional_out_labelled DFA;
 
@@ -208,8 +208,12 @@ int main(int argc, char** argv)
         // compute A^2 pruned states
         uint a_2_states = 0;
         uint i=0, j=1;
-        std::cout << "compute A^2 pruned automaton states\n";
-        std::cout << "Interval size: " << intervals.size() << "\n";
+        #ifdef VERBOSE
+        {
+            std::cout << "compute A^2 pruned automaton states\n";
+            std::cout << "Interval size: " << intervals.size() << "\n";
+        }
+        #endif
 
         while( i < intervals.size() - 1 )
         {
@@ -241,8 +245,6 @@ int main(int argc, char** argv)
             std::cout << "A squared pruned states: " << a_2_states << "\n";
         }
         #endif
-
-        std::cout << "A squared pruned states: " << a_2_states << "\n";
 
         DFA A = DFA(a_2_states);
         
@@ -355,8 +357,6 @@ int main(int argc, char** argv)
         // open output file
         std::ofstream ofile;
         ofile.open("answer");
-        //ofile.open(out); 
-        std::cout << "Check cyclicity!\n";
         if( DFS_cycle_detection(A) ){ std::cout << "Cycle found! The language is not Wheeler!\n"; ofile << 0; }
         else{ std::cout << "No cycle found! The language is Wheeler!\n"; ofile << 1; }
         ofile.close();
@@ -364,7 +364,7 @@ int main(int argc, char** argv)
     else
     {
         std::cerr << "invalid no. arguments\n";
-        std::cerr << "Format your command as follows: TODO\n";
+        std::cerr << "Format your command as follows: .\\recognizer minimum_dfa dfa_intervals\n";
         exit(1);
     }
 

@@ -2,17 +2,18 @@
 
 ### Description
 
-This is a tool to check if a regular expression recognizes a Wheeler language.
+This tool implements a software to check if a regular expression or a DFA recognizes a Wheeler language.
 
 ### Requirements
 
 * A modern C++17 compiler such as `g++` version 8.4 or higher.
 * The cmake build system, version \geq 3.10.
 * A Linux 64-bit operating system.
+* A modern Python 3 release.
 
 ### Download
 
-To clone the repository, run:
+To clone the repository, run the following commands:
 
 ```console
 git clone https://github.com/regindex/Wheeler-language-recognizer.git
@@ -21,31 +22,19 @@ git submodule update --init --recursive
 
 ### Compile
 
-You can compile using cmake and make:
+You can compile the code using the following python3 script:
 
 ```console
-make -C external/DFA-suffix-doubling/
-make -C external/DFAgen-suffixdoubling/
-g++ external/dfaMinimizationComparison/Cpp/Modified/Modified.cpp -o external/dfaMinimizationComparison/Cpp/Modified/minimizer.x
-cp external/utils.py external/re_to_dfa/src/re_to_dfa/
-mkdir external/finite-automata-partition-refinement/build
-cd external/finite-automata-partition-refinement/build/
-cmake ..
-cd ../../../
-make -C external/finite-automata-partition-refinement/build/
-mkdir build
-cd build
-cmake ..
-make 
+python3 compile.py
 ```
 
 ### Input
 
-The tool takes in input a regular expression as recognized by the re_to_dfa tool,
+The tool can take in input a regular expression; the supported operators are "()?+|*",
 ```
 "a(ac*a)|(bc*b)"
 ```
-The tool can also take in input a DFA. The file has to contain in the first line the number of states, number of edges, source and number of accepting states of the input DFA. The rest of the file contains an edge per line (origin - label - destination) and a list of accepting states separated by newline characters. We assume there is a single outgoing edge from the source labeled by the smallest label in the automaton (see below for an example).
+The tool can also take in input a DFA. The file has to contain information about the number of states, number of edges, source state, and number of accepting states of the input DFA in the first line. The rest of the file contains an edge per line (origin - label - destination) and a list of accepting states separated by newline characters. We ask that the source has a single outgoing edge labeled by the smallest label in the automaton (see below for an example).
 ```
 9 12 0 2
 0 0 1
@@ -88,12 +77,35 @@ python3 wheeler_lan_rec.py "a(ac*a)|(bc*b)"
 python3 wheeler_lan_rec.py --DFA data/regexp.dfa 
 ```
 
-# External resources
+### External resources
 
-
-* [re_to_dfa](https://github.com/fnvir/re_to_dfa.git)
+* [finite-automata-partition-refinement](https://github.com/regindex/finite-automata-partition-refinement.git)
+* [DFA-suffix-doubling](https://github.com/regindex/DFA-suffix-doubling.git)
+* [regexpToAutomaton](https://github.com/regindex/RegexpToAutomaton.git)
+* [dfaMinimizationComparison](https://github.com/WalkerCodeRanger/dfaMinimizationComparison.git)
 * [malloc_count](https://github.com/bingmann/malloc_count)
+
+### Citation 
+
+Please, if you use this tool in an academic setting, cite the following paper:
+
+    @inproceedings{BeckerCKKPP23,
+      author       = {Ruben Becker and
+                      Davide Cenzato and
+                      Sung{-}Hwan Kim and
+                      Bojana Kodric and
+                      Alberto Policriti and
+                      Nicola Prezza},
+      title        = {Optimal {Wheeler} Language Recognition},
+      booktitle    = {In Proceedings of 30th International Symposium on String Processing and 
+                      Information Retrieval, {SPIRE} 2023},
+      series       = {Lecture Notes in Computer Science},
+      volume       = {14240},
+      pages        = {62--74},
+      year         = {2023},
+      doi          = {10.1007/978-3-031-43980-3\_6},
+    }
 
 ### Funding
 
-This project has received funding from the European Research Council (ERC) under the European Union’s Horizon Europe research and innovation programme, project REGINDEX, grant agreement No 101039208
+This project has received funding from the European Research Council (ERC) under the European Union’s Horizon Europe research and innovation program, project REGINDEX, grant agreement No 101039208

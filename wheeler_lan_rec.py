@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 
 import sys, time, argparse, subprocess, os.path
-from pathlib import Path
-cwd = Path(__file__).parent.absolute()
-sys.path.insert(1, str(cwd)+'/external/re_to_dfa/src/')
-from re_to_dfa import *
-
 
 Description = """
-Tool to check if a regular expression recognizes a Wheeler language.
+Tool to check if a regular expression or a DFA recognizes a Wheeler language.
 """
 
 dirname = os.path.dirname(os.path.abspath(__file__))
@@ -17,6 +12,7 @@ convform_exe  =  "external/DFA-suffix-doubling/convert-format"
 pruning_exe   =  "build/prune.x"
 partref_exe   =  "external/finite-automata-partition-refinement/build/part-ref32.x"
 doublingmerge_exe =  "external/DFAgen-suffixdoubling/suffix-doubling-on-pruned-graphs"
+reg_to_dfa_exe =  "external/RegexpToAutomaton/regToAutomaton"
 recognizer_exe = "build/recognizer.x"
 
 def main():
@@ -35,64 +31,43 @@ def main():
     
     with open(logfile_name,"a") as logfile:
 
+        start0 = start = time.time()
+
         if( not args.DFA ):
 
-            dfa = re_to_dfa(args.input)
+            # add dollar to regexp
+            args.input = "($)" + "(" + args.input + ")"
+            print("Computing the minimum DFA of the regexp")
+            # compute minimum DFA
+            command = "{exe} {regexp} --DFAmin".format(exe=reg_to_dfa_exe,regexp=args.input)
+            with open("data/regexp.mdfa","w+") as dfa_file:
+                subprocess.call(command.split(), stdout=dfa_file)
+            # set the resulting DFA as the input
+            args.input = "data/regexp.mdfa"
 
-            ttable = dfa.transition_table;
-
-            dfa_text = "0 36 1\n"
-            max_state = 0
-            no_edges = 1
-            no_finalstates = 0
-
-            # write DFA
-
-            for i in ttable.items():
-                source = int(i[0][1:]) + 1
-                if( source > max_state ):
-                    max_state = source
-                for j in i[1].items():
-                    dest = int(j[1][1:]) + 1
-                    if( dest > max_state ):
-                        max_state = dest
-
-                    dfa_text = dfa_text + str(source) + " "+ str(ord(j[0])) + " " + str(dest) + "\n"
-                    no_edges += 1
-
-            for i in dfa.finalstates:
-
-                dfa_text = dfa_text + str(int(i[1:])+1) + "\n"
-                no_finalstates += 1
-
-            print("max state: " +str(max_state))
-
-            with open("data/regexp.dfa",'w') as out:
-                out.write(str(max_state+1) + " " + str(no_edges) + " " + "0" + " " + str(no_finalstates) + "\n")
-                out.write(dfa_text)
-
-            dfa_text = ""
-
-            #args.input += ".dfa"
-            args.input = "data/regexp.dfa"
-
-        start0 = start = time.time()
+            print("Elapsed time: {0:.4f}".format(time.time()-start))
 
         ############################################
 
-        command = "{exe} -in < {input} > {output}".format(exe=dfamin_exe, input=args.input, output=args.input+".min")
-        print("==== computing minimum DFA. Command: ", command)
+        if( args.DFA ):
 
-        with open(args.input, 'rb', 0) as a, open(args.input+".min", 'w') as b:
-            rc = subprocess.call(dfamin_exe, stdin=a, stdout=b)
+            start = time.time()
 
-        print("Elapsed time: {0:.4f}".format(time.time()-start))
+            # compute the minimum dfa        
+            command = "{exe} -in < {input} > {output}".format(exe=dfamin_exe, input=args.input, output=args.input+".min")
+            print("==== computing minimum DFA. Command: ", command)
+
+            with open(args.input, 'rb', 0) as a, open(args.input+".min", 'w') as b:
+                rc = subprocess.call(dfamin_exe, stdin=a, stdout=b)
+
+            print("Elapsed time: {0:.4f}".format(time.time()-start))
+            args.input = args.input+".min"
 
         ############################################
 
         start = time.time()
 
-        command = "{exe} {input} {mindfa} {maxdfa}".format(exe=pruning_exe, input=args.input+".min", mindfa=args.input+".prmin", maxdfa=args.input+".prmax")
+        command = "{exe} {input} {mindfa} {maxdfa}".format(exe=pruning_exe, input=args.input, mindfa=args.input+".prmin", maxdfa=args.input+".prmax")
 
         print("==== pruning minimum DFA. Command: ", command)
         if(execute_command(command,logfile,logfile_name)!=True):
@@ -146,7 +121,7 @@ def main():
 
         start = time.time()
 
-        command = "{exe} {dfa} {interval}".format(exe=recognizer_exe, dfa=args.input+".min", interval=args.input+".interval")
+        command = "{exe} {dfa} {interval}".format(exe=recognizer_exe, dfa=args.input, interval=args.input+".interval")
 
         print("==== compute A^2 pruned automaton and check language Wheelerness. Command: ", command)
         if(execute_command(command,logfile,logfile_name)!=True):
@@ -157,9 +132,9 @@ def main():
         with open("answer", 'rb', 0) as a:
             answer = a.readline().decode()
             if(answer == "1"):
-                print("*** The language recognized by " + args.input + " is Wheeler!")
+                print("*** The language recognized by the DFA in " + args.input + " is Wheeler!")
             else:
-                print("*** The language recognized by " + args.input + " is NOT Wheeler!")
+                print("*** The language recognized by the DFA in " + args.input + " is NOT Wheeler!")
 
         ############################################
 

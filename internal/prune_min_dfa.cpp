@@ -38,7 +38,7 @@ void prune_dfa(std::string input_file, std::string min_dfa_file, std::string max
     std::vector<std::string> out; 
 
     std::getline(input, line);
-    tokenize(line, delim, out); 
+    tokenize(line, delim, out);
 
     assert(out.size() == 4);
 
@@ -47,10 +47,14 @@ void prune_dfa(std::string input_file, std::string min_dfa_file, std::string max
     source = std::stoull(out[2]);
     accepting = std::stoull(out[3]);
 
-    std::cout << "Nodes: " << nodes << "\n";
-    std::cout << "Edges: " << edges << "\n";
-    std::cout << "Source: " << source << "\n";
-    std::cout << "No. acc. states: " << accepting << "\n";
+    #ifdef VERBOSE
+    {
+        std::cout << "Nodes: " << nodes << "\n";
+        std::cout << "Edges: " << edges << "\n";
+        std::cout << "Source: " << source << "\n";
+        std::cout << "No. acc. states: " << accepting << "\n";
+    }
+    #endif
     
     std::vector<char> vmin(nodes, 127);
     std::vector<char> vmax(nodes, 0);
