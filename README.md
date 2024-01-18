@@ -1,7 +1,7 @@
 # Wheeler-language-recognizer
+#### ** Disclaimer ** - The software in this repository will no longer be maintained; please visit DeterministicWidth for the new version ([go to the repo](https://github.com/regindex/DeterministicWidth.git)).
 
 ### Description
-
 This tool implements a software to check if a regular expression or a DFA recognizes a Wheeler language.
 
 ### Requirements
@@ -85,9 +85,13 @@ python3 wheeler_lan_rec.py --DFA data/regexp.dfa
 * [dfaMinimizationComparison](https://github.com/WalkerCodeRanger/dfaMinimizationComparison.git)
 * [malloc_count](https://github.com/bingmann/malloc_count)
 
-### Citation 
+### References and Citations 
 
-Please, if you use this tool in an academic setting, cite the following paper:
+[1] Ruben Becker, Davide Cenzato, Sung-Hwan Kim, Bojana Kodric, Alberto Policriti, Nicola Prezza: Optimal Wheeler Language Recognition. SPIRE 2023: 62-74 ([go to the paper](https://link.springer.com/chapter/10.1007/978-3-031-43980-3_6))
+
+[2] Ruben Becker, Davide Cenzato, Sung-Hwan Kim, Bojana Kodric, Alberto Policriti, Nicola Prezza: Optimal Wheeler Language Recognition. CoRR abs/2306.04737 (2023) ([go to the paper](https://arxiv.org/abs/2306.04737))
+
+Please, if you use this tool in an academic setting, cite the following papers:
 
     @inproceedings{BeckerCKKPP23,
       author       = {Ruben Becker and
@@ -106,6 +110,20 @@ Please, if you use this tool in an academic setting, cite the following paper:
       doi          = {10.1007/978-3-031-43980-3\_6},
     }
 
+    @article{BeckerCKKPP23arXiv,
+    author       = {Ruben Becker and
+                    Davide Cenzato and
+                    Sung{-}Hwan Kim and
+                    Bojana Kodric and
+                    Alberto Policriti and
+                    Nicola Prezza},
+    title        = {Optimal Wheeler Language Recognition},
+    journal      = {CoRR},
+    volume       = {abs/2306.04737},
+    year         = {2023},
+    doi          = {10.48550/ARXIV.2306.04737},
+    }
+
 ### Funding
 
-This project has received funding from the European Research Council (ERC) under the European Union’s Horizon Europe research and innovation program, project REGINDEX, grant agreement No 101039208
+This project has received funding from the European Research Council (ERC) under the European Union’s Horizon Europe research and innovation program, project REGINDEX, grant agreement No 101039208.
